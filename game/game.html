@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,body{
+            width:100%;height:100%;
+            overflow: hidden;
+            padding:0;margin: 0;
+        }
+        canvas{
+            background: url(imgs/back/back.jpg);
+            background-repeat:repeat-x;
+            background-color:#fff;
+
+
+        }
+
+    </style>
+    <script src="game.js"></script>
+    <script src="imgload.js"></script>
+    <script src="touch.js"></script>
+    <script src="hitPix.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded",function(){
+
+          var canvas=document.querySelector("canvas");  //获取canvas对象
+          var cobj=canvas.getContext("2d");  //取得上下文
+          var clientW,clientH;  //定义浏览器的宽高
+          var runimg=document.querySelectorAll(".run");  //获取所有跑的图片
+          var jumpimg=document.querySelectorAll(".jump");  //获取一张跳的图片
+          var hinderimg=document.querySelectorAll(".hinder"); //获取所有障碍物图片
+
+
+            //1. 获取整个游戏的对象
+            var gameObj=new game(canvas,cobj,runimg,jumpimg,hinderimg);  
+
+
+          window.onresize=function(){
+          	//当浏览器发生变化时，重新获取浏览器的宽高
+                clientW=document.documentElement.clientWidth;
+                clientH=document.documentElement.clientHeight;
+                canvas.width=clientW;  //画布的宽等于浏览器的宽
+                canvas.height=clientH;//画布的高等于浏览器的高
+                if(canvas.width/1136>canvas.height/544){ //如果画布的宽高比大，则设置背景图片的Size值为contain
+                    canvas.style.backgroundSize="contain";
+                }else{
+                    canvas.style.backgroundSize="cover";//如果浏览器的宽高比小，则设置背景图片的Size值为cover
+                }
+
+              gameObj.person.y=canvas.height-gameObj.person.height;  //游戏人物的位置就等于画布的高-游戏人物的高
+
+
+              for(var i=0;i<gameObj.hinderArr.length;i++){  //循环障碍物的数量
+                  gameObj.hinderArr[i].y=canvas.height-gameObj.hinderArr[i].height;
+              }
+
+
+
+          }
+          window.onresize();
+
+		//调用到图片加载的js
+           var imgloadObj= new imageLoad(document.querySelectorAll("img"));
+            imgloadObj.loadAll(function(){  //当图片全部加载完成开始游戏
+                 gameObj.play();
+            });
+
+
+
+
+        })
+    </script>
+</head>
+<body>
+
+<canvas>
+
+</canvas>
+<!--
+
+-->
+<img src="imgs/person/run1.png" alt="" class="run" hidden>
+<img src="imgs/person/run2.png" alt="" class="run" hidden>
+<img src="imgs/person/run3.png" alt="" class="run" hidden>
+<img src="imgs/person/run4.png" alt="" class="run" hidden>
+<img src="imgs/person/run5.png" alt="" class="run" hidden>
+<img src="imgs/person/run6.png" alt="" class="run" hidden>
+<img src="imgs/person/run7.png" alt="" class="run" hidden>
+
+
+<img src="imgs/hinder/boom.png" alt="" hidden class="hinder">
+<img src="imgs/hinder/chick.png" alt=""hidden class="hinder">
+<img src="imgs/hinder/egg.png" alt=""hidden class="hinder">
+<img src="imgs/hinder/flow.png" alt=""hidden class="hinder">
+<img src="imgs/hinder/grass.png" alt=""hidden class="hinder">
+<img src="imgs/hinder/pail.png" alt=""hidden class="hinder">
+<img src="imgs/hinder/stone.png" alt=""hidden class="hinder">
+<img src="imgs/hinder/tree.png" alt=""hidden class="hinder">
+<img src="imgs/hinder/ys.png" alt=""hidden class="hinder">
+
+
+
+<img src="imgs/person/jump2.png" alt="" class="jump">
+</body>
+</html>
